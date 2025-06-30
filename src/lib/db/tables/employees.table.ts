@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { date, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 import { usersTable } from './users.table';
 import { ranks } from '@/variables/ranks';
 
@@ -19,6 +19,9 @@ export const employeesTable = pgTable('employees', {
     onDelete: 'cascade',
   }),
   removedAt: timestamp('removed_at'),
+  position: text('position').notNull(),
+  birthday: date('birthday').notNull(),
+  userId: text('user_id').references(() => usersTable.id),
 });
 
 export type EmployeeTable = typeof employeesTable.$inferSelect;

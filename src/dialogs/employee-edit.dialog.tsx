@@ -76,12 +76,15 @@ export function EmployeeEditDialog(props: EmployeeEditDialogProps) {
 
   useEffect(() => {
     if (data?.employee) {
-      const { id, lastName, firstName, rank } = data.employee;
+      const { id, lastName, firstName, rank, position, birthday } =
+        data.employee;
 
       form.setValue('id', id);
       form.setValue('lastName', lastName);
       form.setValue('firstName', firstName);
       form.setValue('rank', rank);
+      form.setValue('position', position);
+      form.setValue('birthday', birthday);
     }
   }, [data, form]);
 
@@ -159,6 +162,34 @@ export function EmployeeEditDialog(props: EmployeeEditDialogProps) {
                           ))}
                         </SelectContent>
                       </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='position'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Албан тушаал</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <FormField
+                  control={form.control}
+                  name='birthday'
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Төрсөн өдөр</FormLabel>
+                      <FormControl>
+                        <Input type='date' {...field} />
+                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}

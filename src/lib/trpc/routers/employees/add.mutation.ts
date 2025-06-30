@@ -8,7 +8,7 @@ export const employeeAddMutation = authProcedure
   .input(employeeAddSchema)
   .mutation(async ({ input, ctx: { session } }) => {
     try {
-      const { lastName, firstName, rank } = input;
+      const { lastName, firstName, rank, birthday, position } = input;
 
       const [employee] = await db
         .insert(employeesTable)
@@ -16,6 +16,8 @@ export const employeeAddMutation = authProcedure
           lastName,
           firstName,
           rank,
+          birthday,
+          position,
           addedBy: session.user.id,
           addedAt: new Date(),
         })

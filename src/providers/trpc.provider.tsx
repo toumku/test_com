@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { ReactNode, useState } from 'react';
 import { TRPCProvider as CoreTRPCProvider } from '@/lib/trpc/trpc';
-import { Router } from '../../lib/trpc/routers';
+import { Router } from '../lib/trpc/routers';
 import superjson from 'superjson';
 
 function makeQueryClient() {
@@ -14,6 +14,7 @@ function makeQueryClient() {
         // With SSR, we usually want to set some default staleTime
         // above 0 to avoid refetching immediately on the client
         staleTime: 60 * 1000,
+        retry: false,
       },
     },
   });

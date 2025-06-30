@@ -6,28 +6,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { EmployeesSortableColumn } from '@/configs/employees.config';
+import { UsersSortableColumn } from '@/configs/users.config';
 import { useTRPC } from '@/lib/trpc/trpc';
 import { SortDirection } from '@/variables/sort-direction';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Pencil, Key } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAtom } from 'jotai';
-import {
-  employeeAddDialogAtom,
-  employeeEditDialogAtom,
-} from '@/atoms/employees.atom';
-import { EmployeeAddDialog } from '@/dialogs/employee-add-dialog';
-import { EmployeeEditDialog } from '@/dialogs/employee-edit.dialog';
+import { userAddDialogAtom } from '@/atoms/users.atom';
+import { UserAddDialog } from '@/dialogs/user-add-dialog';
 import { LoadingSpinner } from '@/components/loading-spinner';
 import { Paginate } from '@/components/paginate';
 import { SearchBox } from '@/components/search-box';
-import { userAddDialogAtom } from '@/atoms/users.atom';
-import { UserAddDialog } from '@/dialogs/user-add-dialog';
 
-export type EmployeesTableProps = {
+export type UsersTableProps = {
   page: number;
   setPage: (page: number) => void;
   take: number;
@@ -36,8 +29,8 @@ export type EmployeesTableProps = {
   setSearch: (search: string) => void;
   localSearch: string;
   setLocalSearch: (localSearch: string) => void;
-  sortColumn: EmployeesSortableColumn;
-  setSortColumn: (sortColumn: EmployeesSortableColumn) => void;
+  sortColumn: UsersSortableColumn;
+  setSortColumn: (sortColumn: UsersSortableColumn) => void;
   sortDirection: SortDirection;
   setSortDirection: (sortDirection: SortDirection) => void;
   selectedIds: string[];
@@ -51,7 +44,7 @@ export type EmployeesTableProps = {
   filterUserIds?: string;
 };
 
-export function EmployeesTable(props: EmployeesTableProps) {
+export function UsersTable(props: UsersTableProps) {
   const {
     page,
     setPage,
@@ -78,7 +71,7 @@ export function EmployeesTable(props: EmployeesTableProps) {
 
   const trpc = useTRPC();
   const { isPending, isFetching, isError, error, data, refetch } = useQuery(
-    trpc.employeesQuery.queryOptions({
+    trpc.usersQuery.queryOptions({
       page,
       take,
       search,
@@ -89,9 +82,7 @@ export function EmployeesTable(props: EmployeesTableProps) {
       filterUserIds,
     })
   );
-  const [addDialog, setAddDialog] = useAtom(employeeAddDialogAtom);
-  const [editDialog, setEditDialog] = useAtom(employeeEditDialogAtom);
-  const [userDialog, setUserDialog] = useAtom(userAddDialogAtom);
+  const [addDialog, setAddDialog] = useAtom(userAddDialogAtom);
 
   useEffect(() => {
     setPage(1);
@@ -110,25 +101,12 @@ export function EmployeesTable(props: EmployeesTableProps) {
   function onAdd() {
     setAddDialog({
       open: true,
-    });
-  }
-
-  function onEdit(id: string) {
-    setEditDialog({
-      open: true,
-      id,
+      employeeId: '',
     });
   }
 
   function onRefresh() {
     refetch();
-  }
-
-  function onAddUser(id: string) {
-    setUserDialog({
-      open: true,
-      employeeId: id,
-    });
   }
 
   return (
@@ -150,13 +128,10 @@ export function EmployeesTable(props: EmployeesTableProps) {
           <TableRow>
             <TableHead></TableHead>
             <TableHead className='w-[100px]'>#</TableHead>
-            <TableHead>Овог</TableHead>
             <TableHead>Нэр</TableHead>
-            <TableHead>Цол</TableHead>
-            <TableHead>Албан тушаал</TableHead>
-            <TableHead>Төрсөн өдөр</TableHead>
-            <TableHead>Бүртгэсэн хэрэглэгч</TableHead>
-            <TableHead>Зассан хэрэглэгч</TableHead>
+            <TableHead>Цахим шуудан</TableHead>
+            <TableHead>Цахим шуудан баталгаажсан эсэх</TableHead>
+            <TableHead>Эрх</TableHead>
             <TableHead>Бүртгэсэн огноо</TableHead>
             <TableHead>Зассан огноо</TableHead>
           </TableRow>
@@ -172,64 +147,38 @@ export function EmployeesTable(props: EmployeesTableProps) {
             <TableRow>
               <TableCell colSpan={99}>{error.message}</TableCell>
             </TableRow>
-          ) : !data || data.employees.length === 0 ? (
+          ) : !data || data.users.length === 0 ? (
             <TableRow>
               <TableCell colSpan={99}>Өгөгдөл алга</TableCell>
             </TableRow>
           ) : (
-            data.employees.map((employee, index) => {
+            data.users.map((user, index) => {
               const {
                 id,
-                lastName,
-                firstName,
-                rank,
-                position,
-                birthday,
-                addedName,
-                editedName,
-                // removedName,
-                addedAt,
-                editedAt,
-                // removedAt,
-                userId,
-              } = employee;
+                name,
+                email,
+                emailVerified,
+                role,
+                createdAt,
+                updatedAt,
+              } = user;
 
               return (
                 <TableRow key={id}>
-                  <TableCell>
-                    <Button
-                      size={'icon'}
-                      variant={'ghost'}
-                      onClick={() => onEdit(id)}
-                    >
-                      <Pencil />
-                    </Button>
-                    {!userId && (
-                      <Button
-                        size={'icon'}
-                        variant={'ghost'}
-                        onClick={() => onAddUser(id)}
-                      >
-                        <Key />
-                      </Button>
-                    )}
-                  </TableCell>
+                  <TableCell></TableCell>
                   <TableCell className='font-medium'>
                     {(page - 1) * take + (index + 1)}
                   </TableCell>
-                  <TableCell>{lastName}</TableCell>
-                  <TableCell>{firstName}</TableCell>
-                  <TableCell>{rank}</TableCell>
-                  <TableCell>{position}</TableCell>
-                  <TableCell>{birthday}</TableCell>
-                  <TableCell>{addedName}</TableCell>
-                  <TableCell>{editedName ? editedName : '-'}</TableCell>
+                  <TableCell>{name}</TableCell>
+                  <TableCell>{email}</TableCell>
+                  <TableCell>{emailVerified}</TableCell>
+                  <TableCell>{role}</TableCell>
                   <TableCell>
-                    {dayjs(addedAt).format('YYYY-MM-DD HH:mm:ss')}
+                    {dayjs(createdAt).format('YYYY-MM-DD HH:mm:ss')}
                   </TableCell>
                   <TableCell>
-                    {editedAt
-                      ? dayjs(editedAt).format('YYYY-MM-DD HH:mm:ss')
+                    {updatedAt
+                      ? dayjs(updatedAt).format('YYYY-MM-DD HH:mm:ss')
                       : '-'}
                   </TableCell>
                 </TableRow>
@@ -244,12 +193,10 @@ export function EmployeesTable(props: EmployeesTableProps) {
         setPage={setPage}
         take={take}
         total={data?.total || 0}
-        found={data?.found || 0}
+        found={data?.total || 0}
       />
 
-      {addDialog.open && <EmployeeAddDialog onSuccess={onRefresh} />}
-      {editDialog.open && <EmployeeEditDialog onSuccess={onRefresh} />}
-      {userDialog.open && <UserAddDialog onSuccess={onRefresh} />}
+      {addDialog.open && <UserAddDialog onSuccess={onRefresh} />}
     </div>
   );
 }

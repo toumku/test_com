@@ -36,13 +36,13 @@ export default function ProtectedLayout(props: ProtectedLayoutProps) {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>
-                    Building Your Application
-                  </BreadcrumbLink>
+                  <BreadcrumbLink href='#'>ХХЕГ</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbSeparator className='hidden md:block' />
                 <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                  <BreadcrumbPage>
+                    Компьютерын хувийн хэрэг хөтлөх дэвтэр
+                  </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>

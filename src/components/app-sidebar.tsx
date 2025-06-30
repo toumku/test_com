@@ -16,6 +16,11 @@ import {
 const data = {
   navMain: [
     {
+      title: 'Хэрэглэгч',
+      url: '/users',
+      icon: IdCardLanyard,
+    },
+    {
       title: 'Бие бүрэлдэхүүн',
       url: '/employees',
       icon: IdCardLanyard,

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Roboto } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/sonner';
-import { TRPCProvider } from './providers/trpc.provider';
+import { TRPCProvider } from '../providers/trpc.provider';
 
 const robotoSans = Roboto({
   subsets: ['cyrillic'],

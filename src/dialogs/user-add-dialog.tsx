@@ -12,10 +12,10 @@ import {
 } from '@/components/ui/dialog';
 import { useForm } from 'react-hook-form';
 import {
-  employeeAddSchema,
-  EmployeeAddSchema,
-  employeeAddSchemaDefaultValues,
-} from '@/schemas/employees.schema';
+  userAddSchema,
+  UserAddSchema,
+  userAddSchemaDefaultValues,
+} from '@/schemas/users.schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Form,
@@ -32,35 +32,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { ranks } from '@/variables/ranks';
 import { useTRPC } from '@/lib/trpc/trpc';
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { useAtom } from 'jotai';
-import { employeeAddDialogAtom } from '@/atoms/employees.atom';
+import { userAddDialogAtom } from '@/atoms/users.atom';
+import { roles } from '@/variables/roles';
 
-export type EmployeeAddDialogProps = {
+export type UserAddDialogProps = {
   onSuccess(): void;
 };
 
-export function EmployeeAddDialog(props: EmployeeAddDialogProps) {
+export function UserAddDialog(props: UserAddDialogProps) {
   const { onSuccess } = props;
-  const [dialog, setDialog] = useAtom(employeeAddDialogAtom);
+  const [dialog, setDialog] = useAtom(userAddDialogAtom);
   const trpc = useTRPC();
-  const form = useForm<EmployeeAddSchema>({
-    resolver: zodResolver(employeeAddSchema),
-    defaultValues: employeeAddSchemaDefaultValues,
+  const form = useForm<UserAddSchema>({
+    resolver: zodResolver(userAddSchema),
+    defaultValues: {
+      ...userAddSchemaDefaultValues,
+      employeeId: dialog.employeeId,
+    },
   });
-  const addEmployee = useMutation(
-    trpc.employeeAddMutation.mutationOptions({
+  const addUser = useMutation(
+    trpc.userAddMutation.mutationOptions({
       onError(err) {
         toast.error(err.message);
       },
       onSuccess(data) {
-        toast.success(`${data.employee.firstName} бүртгэгдлээ`);
+        toast.success(`${data.session.user.name} бүртгэгдлээ`);
 
         setDialog({
           open: false,
+          employeeId: '',
         });
 
         onSuccess();
@@ -68,13 +72,14 @@ export function EmployeeAddDialog(props: EmployeeAddDialogProps) {
     })
   );
 
-  function onSubmit(data: EmployeeAddSchema) {
-    addEmployee.mutate(data);
+  function onSubmit(data: UserAddSchema) {
+    addUser.mutate(data);
   }
 
   function setOpen(open: boolean) {
     setDialog({
       open,
+      employeeId: open ? dialog.employeeId : '',
     });
   }
 
@@ -82,58 +87,43 @@ export function EmployeeAddDialog(props: EmployeeAddDialogProps) {
     <Dialog open={dialog.open} onOpenChange={setOpen}>
       <DialogContent className='sm:max-w-[425px]'>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-5'>
+          <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <DialogHeader>
-              <DialogTitle>Төвийн бүрэлдэхүүн нэмэх</DialogTitle>
+              <DialogTitle>Хэрэглэгч олгох</DialogTitle>
             </DialogHeader>
 
             <FormField
               control={form.control}
-              name='lastName'
+              name='email'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Овог</FormLabel>
+                  <FormLabel>Цахим шуудан</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type='email' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name='firstName'
+              name='role'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Нэр</FormLabel>
-                  <FormControl>
-                    <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name='rank'
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Цол</FormLabel>
+                  <FormLabel>Эрх</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
                   >
                     <FormControl className='w-full'>
                       <SelectTrigger>
-                        <SelectValue placeholder='Цол сонгоно уу' />
+                        <SelectValue placeholder='Эрх сонгоно уу' />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {ranks.map(rank => (
-                        <SelectItem key={rank} value={rank}>
-                          {rank}
+                      {roles.map(role => (
+                        <SelectItem key={role} value={role}>
+                          {role}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -142,41 +132,38 @@ export function EmployeeAddDialog(props: EmployeeAddDialogProps) {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name='position'
+              name='password'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Албан тушаал</FormLabel>
+                  <FormLabel>Нууц үг</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input type='password' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
-              name='birthday'
+              name='confirmPassword'
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Төрсөн өдөр</FormLabel>
+                  <FormLabel>Батлах нууц үг</FormLabel>
                   <FormControl>
-                    <Input type='date' {...field} />
+                    <Input type='password' {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
             <DialogFooter>
               <DialogClose asChild>
                 <Button variant='outline'>Цуцлах</Button>
               </DialogClose>
-              <Button type='submit' disabled={addEmployee.isPending}>
-                Нэмэх
+              <Button type='submit' disabled={addUser.isPending}>
+                Олгох
               </Button>
             </DialogFooter>
           </form>

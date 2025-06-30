@@ -29,8 +29,10 @@ export type EmployeeSchema = z.infer<typeof employeesSchema>;
 
 export const employeeAddSchema = z.object({
   lastName: z.string().min(1),
-  firstName: z.string(),
+  firstName: z.string().min(1),
   rank: z.enum(ranks),
+  position: z.string().min(1),
+  birthday: z.string().min(1),
 });
 
 export type EmployeeAddSchema = z.infer<typeof employeeAddSchema>;
@@ -39,6 +41,8 @@ export const employeeAddSchemaDefaultValues: EmployeeAddSchema = {
   lastName: '',
   firstName: '',
   rank: 'Дэд ахлагч',
+  position: '',
+  birthday: '',
 };
 
 export const employeeEditSchema = employeeAddSchema.extend({
@@ -52,6 +56,8 @@ export const employeeEditSchemaDefaultValues: EmployeeEditSchema = {
   lastName: '',
   firstName: '',
   rank: 'Дэд ахлагч',
+  position: '',
+  birthday: '',
 };
 
 export const employeeSchema = employeeEditSchema.pick({

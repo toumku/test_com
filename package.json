@@ -9,7 +9,9 @@
     "lint": "next lint",
     "generate": "npx drizzle-kit generate",
     "migrate": "npx drizzle-kit migrate",
-    "push": "npx drizzle-kit push"
+    "push": "npx drizzle-kit push",
+    "studio": "npx drizzle-kit studio",
+    "ts": "tsc --noEmit"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
