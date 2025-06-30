@@ -1,17 +1,18 @@
-import { betterAuth } from "better-auth";
-import { nextCookies } from "better-auth/next-js";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "./db";
+import { betterAuth } from 'better-auth';
+import { nextCookies } from 'better-auth/next-js';
+import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { db } from './db';
 import {
   accountsTable,
   sessionsTable,
   usersTable,
   verificationsTable,
-} from "./db/tables";
+} from './db/tables';
+import { admin } from 'better-auth/plugins';
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
-    provider: "pg",
+    provider: 'pg',
     schema: {
       users: usersTable,
       accounts: accountsTable,
@@ -22,17 +23,23 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
-  plugins: [nextCookies()], // make sure this is the last plugin in the array
+  plugins: [
+    nextCookies(),
+    admin({
+      adminRoles: ['admin', 'user'],
+      defaultRole: 'user',
+    }),
+  ], // make sure this is the last plugin in the array
   user: {
-    modelName: "users",
+    modelName: 'users',
   },
   account: {
-    modelName: "accounts",
+    modelName: 'accounts',
   },
   session: {
-    modelName: "sessions",
+    modelName: 'sessions',
   },
   verification: {
-    modelName: "verifications",
+    modelName: 'verifications',
   },
 });
