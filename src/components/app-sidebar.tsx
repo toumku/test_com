@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { IdCardLanyard } from 'lucide-react';
+import { IdCardLanyard, MonitorSmartphone } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
@@ -24,6 +24,11 @@ const data = {
       title: 'Бие бүрэлдэхүүн',
       url: '/employees',
       icon: IdCardLanyard,
+    },
+    {
+      title: 'Төхөөрөмж',
+      url: '/devices',
+      icon: MonitorSmartphone,
     },
   ],
 };

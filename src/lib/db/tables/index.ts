@@ -1,4 +1,5 @@
 export * from './accounts.table';
+export * from './devices.table';
 export * from './employees.table';
 export * from './sessions.table';
 export * from './users.table';
