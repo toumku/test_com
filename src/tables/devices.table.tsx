@@ -12,12 +12,13 @@ import { SortDirection } from '@/variables/sort-direction';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import dayjs from 'dayjs';
-import { Pencil } from 'lucide-react';
+import { Pencil, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAtom } from 'jotai';
 import {
   deviceAddDialogAtom,
   deviceEditDialogAtom,
+  deviceImageDialogAtom,
 } from '@/atoms/devices.atom';
 import { DeviceAddDialog } from '@/dialogs/device-add-dialog';
 import { DeviceEditDialog } from '@/dialogs/device-edit.dialog';
@@ -25,6 +26,7 @@ import { LoadingSpinner } from '@/components/loading-spinner';
 import { Paginate } from '@/components/paginate';
 import { SearchBox } from '@/components/search-box';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { DeviceImageDialog } from '@/dialogs/device-image-dialog';
 
 export type DevicesTableProps = {
   page: number;
@@ -90,6 +92,7 @@ export function DevicesTable(props: DevicesTableProps) {
   );
   const [addDialog, setAddDialog] = useAtom(deviceAddDialogAtom);
   const [editDialog, setEditDialog] = useAtom(deviceEditDialogAtom);
+  const [imageDialog, setImageDialog] = useAtom(deviceImageDialogAtom);
 
   useEffect(() => {
     setPage(1);
@@ -120,6 +123,13 @@ export function DevicesTable(props: DevicesTableProps) {
 
   function onRefresh() {
     refetch();
+  }
+
+  function onImage(id: string) {
+    setImageDialog({
+      open: true,
+      id,
+    });
   }
 
   return (
@@ -173,6 +183,7 @@ export function DevicesTable(props: DevicesTableProps) {
               data.devices.map((device, index) => {
                 const {
                   id,
+                  imageURL,
                   deviceOwnerLastName,
                   deviceOwnerFirstName,
                   name,
@@ -201,6 +212,15 @@ export function DevicesTable(props: DevicesTableProps) {
                       >
                         <Pencil />
                       </Button>
+                      {imageURL && (
+                        <Button
+                          size={'icon'}
+                          variant={'ghost'}
+                          onClick={() => onImage(id)}
+                        >
+                          <Image />
+                        </Button>
+                      )}
                     </TableCell>
                     <TableCell>{(page - 1) * take + (index + 1)}</TableCell>
                     <TableCell>
@@ -235,6 +255,7 @@ export function DevicesTable(props: DevicesTableProps) {
 
       {addDialog.open && <DeviceAddDialog onSuccess={onRefresh} />}
       {editDialog.open && <DeviceEditDialog onSuccess={onRefresh} />}
+      {imageDialog.open && <DeviceImageDialog />}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDown, LogOut } from 'lucide-react';
+import { ChevronsUpDown, LogOut, FileDown } from 'lucide-react';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import {
@@ -65,6 +65,14 @@ export function NavUser() {
         align='end'
         sideOffset={4}
       >
+        <DropdownMenuItem
+          onClick={() => {
+            window.open('/api/export', '_blank');
+          }}
+        >
+          <FileDown />
+          Тайлан татах
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={onSignOut}>
           <LogOut />
           Системээс гарах

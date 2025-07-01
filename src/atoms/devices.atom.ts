@@ -19,3 +19,13 @@ export const deviceEditDialogAtom = atom<DeviceEditDialogAtom>({
   open: false,
   id: '',
 });
+
+export type DeviceImageDialogAtom = {
+  open: boolean;
+  id: string;
+};
+
+export const deviceImageDialogAtom = atom<DeviceImageDialogAtom>({
+  open: false,
+  id: '',
+});

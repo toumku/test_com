@@ -5,6 +5,7 @@ import { employeesTable } from './employees.table';
 
 export const devicesTable = pgTable('devices', {
   id: uuid('id').primaryKey().defaultRandom(),
+  imageURL: text('image_url'),
   name: text('name').notNull(),
   cpu: text('cpu').notNull(),
   ram: text('ram').notNull(),

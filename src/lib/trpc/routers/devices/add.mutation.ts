@@ -18,6 +18,7 @@ export const deviceAddMutation = authProcedure
         mouse,
         type,
         employeeId,
+        imageURL,
       } = input;
 
       const [device] = await db
@@ -32,6 +33,7 @@ export const deviceAddMutation = authProcedure
           mouse,
           type,
           employeeId,
+          imageURL,
           addedBy: session.user.id,
           addedAt: new Date(),
         })

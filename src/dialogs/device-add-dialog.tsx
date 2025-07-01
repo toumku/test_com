@@ -38,6 +38,7 @@ import { toast } from 'sonner';
 import { useAtom } from 'jotai';
 import { deviceAddDialogAtom } from '@/atoms/devices.atom';
 import { deviceTypes } from '@/variables/deviceTypes';
+import { ChangeEvent } from 'react';
 
 export type DeviceAddDialogProps = {
   onSuccess(): void;
@@ -79,6 +80,38 @@ export function DeviceAddDialog(props: DeviceAddDialogProps) {
     });
   }
 
+  async function onFile(event: ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+
+    if (!files) {
+      toast.warning('Файлаа сонгоно уу');
+
+      return;
+    }
+
+    const file = files[0];
+
+    if (!file) {
+      toast.warning('Файлаа сонгоно уу');
+
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (data?.url) {
+      form.setValue('imageURL', data.url);
+    }
+  }
+
   return (
     <Dialog open={dialog.open} onOpenChange={setOpen}>
       <DialogContent className='sm:max-w-[425px]'>
@@ -115,6 +148,21 @@ export function DeviceAddDialog(props: DeviceAddDialogProps) {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name='imageURL'
+              render={({}) => (
+                <FormItem>
+                  <FormLabel>Зураг</FormLabel>
+                  <FormControl>
+                    <Input type='file' onChange={onFile} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <FormField
               control={form.control}
               name='name'

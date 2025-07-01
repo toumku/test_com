@@ -37,6 +37,7 @@ export const deviceAddSchema = z.object({
   mouse: z.string().min(1),
   type: z.enum(deviceTypes),
   employeeId: z.string().min(1),
+  imageURL: z.string(),
 });
 
 export type DeviceAddSchema = z.infer<typeof deviceAddSchema>;
@@ -51,6 +52,7 @@ export const deviceAddSchemaDefaultValues: DeviceAddSchema = {
   mouse: '',
   type: 'Компьютер',
   employeeId: '',
+  imageURL: '',
 };
 
 export const deviceEditSchema = deviceAddSchema.extend({
@@ -70,6 +72,7 @@ export const deviceEditSchemaDefaultValues: DeviceEditSchema = {
   mouse: '',
   type: 'Компьютер',
   employeeId: '',
+  imageURL: '',
 };
 
 export const deviceSchema = deviceEditSchema.pick({
