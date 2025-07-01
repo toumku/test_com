@@ -2,7 +2,7 @@ import { SortDirection } from '@/variables/sort-direction';
 
 export const devicesDefaultPage: number = 1;
 export const devicesDefaultSearch: string = '';
-export const devicesDefaultTake: number = 100;
+export const devicesDefaultTake: number = 10;
 export const devicesEndDate: number = 0;
 export const devicesSortableColumns = [
   'id',

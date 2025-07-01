@@ -25,7 +25,7 @@ import {
   sql,
 } from 'drizzle-orm';
 import { usersTable } from '@/lib/db/tables/users.table';
-import { devicesTable } from '@/lib/db/tables';
+import { devicesTable, employeesTable } from '@/lib/db/tables';
 
 export const devicesQuery = authProcedure
   .input(devicesSchema)
@@ -103,6 +103,10 @@ export const devicesQuery = authProcedure
         .leftJoin(addedBy, eq(addedBy.id, devicesTable.addedBy))
         .leftJoin(editedBy, eq(editedBy.id, devicesTable.editedBy))
         .leftJoin(removedBy, eq(removedBy.id, devicesTable.removedBy))
+        .leftJoin(
+          employeesTable,
+          eq(employeesTable.id, devicesTable.employeeId)
+        )
         .where(filters);
 
       const found = foundRows[0].count;
@@ -113,11 +117,17 @@ export const devicesQuery = authProcedure
           addedName: addedBy.name,
           editedName: editedBy.name,
           removedName: removedBy.name,
+          deviceOwnerLastName: employeesTable.lastName,
+          deviceOwnerFirstName: employeesTable.firstName,
         })
         .from(devicesTable)
         .leftJoin(addedBy, eq(addedBy.id, devicesTable.addedBy))
         .leftJoin(editedBy, eq(editedBy.id, devicesTable.editedBy))
         .leftJoin(removedBy, eq(removedBy.id, devicesTable.removedBy))
+        .leftJoin(
+          employeesTable,
+          eq(employeesTable.id, devicesTable.employeeId)
+        )
         .where(filters)
         .orderBy(orderBy)
         .limit(take)

@@ -29,7 +29,7 @@ export const auth = betterAuth({
       adminRoles: ['admin', 'user'],
       defaultRole: 'user',
     }),
-  ], // make sure this is the last plugin in the array
+  ],
   user: {
     modelName: 'users',
   },

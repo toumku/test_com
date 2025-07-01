@@ -24,6 +24,7 @@ import { DeviceEditDialog } from '@/dialogs/device-edit.dialog';
 import { LoadingSpinner } from '@/components/loading-spinner';
 import { Paginate } from '@/components/paginate';
 import { SearchBox } from '@/components/search-box';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export type DevicesTableProps = {
   page: number;
@@ -135,98 +136,94 @@ export function DevicesTable(props: DevicesTableProps) {
         </Button>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead></TableHead>
-            <TableHead className='w-[100px]'>#</TableHead>
-            <TableHead>Төхөөрөмжийн нэр</TableHead>
-            <TableHead>CPU</TableHead>
-            <TableHead>RAM</TableHead>
-            <TableHead>HDD хэмжээ</TableHead>
-            <TableHead>HDD брэнд</TableHead>
-            <TableHead>Гар</TableHead>
-            <TableHead>Хулгана</TableHead>
-            <TableHead>Төрөл</TableHead>
-            <TableHead>Бүртгэсэн хэрэглэгч</TableHead>
-            <TableHead>Зассан хэрэглэгч</TableHead>
-            <TableHead>Бүртгэсэн огноо</TableHead>
-            <TableHead>Зассан огноо</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {isPending || isFetching ? (
+      <ScrollArea className='w-full rounded-md border whitespace-nowrap'>
+        <Table>
+          <TableHeader>
             <TableRow>
-              <TableCell colSpan={99}>
-                <LoadingSpinner />
-              </TableCell>
+              <TableHead></TableHead>
+              <TableHead>#</TableHead>
+              <TableHead>Эзэмшигч</TableHead>
+              <TableHead>Төхөөрөмжийн нэр</TableHead>
+              <TableHead>CPU</TableHead>
+              <TableHead>RAM</TableHead>
+              <TableHead>HDD хэмжээ</TableHead>
+              <TableHead>HDD брэнд</TableHead>
+              <TableHead>Гар</TableHead>
+              <TableHead>Хулгана</TableHead>
+              <TableHead>Төрөл</TableHead>
+              <TableHead>Бүртгэсэн огноо</TableHead>
             </TableRow>
-          ) : isError ? (
-            <TableRow>
-              <TableCell colSpan={99}>{error.message}</TableCell>
-            </TableRow>
-          ) : !data || data.devices.length === 0 ? (
-            <TableRow>
-              <TableCell colSpan={99}>Өгөгдөл алга</TableCell>
-            </TableRow>
-          ) : (
-            data.devices.map((device, index) => {
-              const {
-                id,
-                name,
-                cpu,
-                ram,
-                hddSize,
-                hddBrand,
-                keyboard,
-                mouse,
-                type,
-                addedName,
-                editedName,
-                // removedName,
-                addedAt,
-                editedAt,
-                // removedAt,
-              } = device;
+          </TableHeader>
+          <TableBody>
+            {isPending || isFetching ? (
+              <TableRow>
+                <TableCell colSpan={99}>
+                  <LoadingSpinner />
+                </TableCell>
+              </TableRow>
+            ) : isError ? (
+              <TableRow>
+                <TableCell colSpan={99}>{error.message}</TableCell>
+              </TableRow>
+            ) : !data || data.devices.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={99}>Өгөгдөл алга</TableCell>
+              </TableRow>
+            ) : (
+              data.devices.map((device, index) => {
+                const {
+                  id,
+                  deviceOwnerLastName,
+                  deviceOwnerFirstName,
+                  name,
+                  cpu,
+                  ram,
+                  hddSize,
+                  hddBrand,
+                  keyboard,
+                  mouse,
+                  type,
+                  // addedName,
+                  // editedName,
+                  // removedName,
+                  addedAt,
+                  // editedAt,
+                  // removedAt,
+                } = device;
 
-              return (
-                <TableRow key={id}>
-                  <TableCell>
-                    <Button
-                      size={'icon'}
-                      variant={'ghost'}
-                      onClick={() => onEdit(id)}
-                    >
-                      <Pencil />
-                    </Button>
-                  </TableCell>
-                  <TableCell className='font-medium'>
-                    {(page - 1) * take + (index + 1)}
-                  </TableCell>
-                  <TableCell>{name}</TableCell>
-                  <TableCell>{cpu}</TableCell>
-                  <TableCell>{ram}</TableCell>
-                  <TableCell>{hddSize}</TableCell>
-                  <TableCell>{hddBrand}</TableCell>
-                  <TableCell>{keyboard}</TableCell>
-                  <TableCell>{mouse}</TableCell>
-                  <TableCell>{type}</TableCell>
-                  <TableCell>{addedName}</TableCell>
-                  <TableCell>{editedName ? editedName : '-'}</TableCell>
-                  <TableCell>
-                    {dayjs(addedAt).format('YYYY-MM-DD HH:mm:ss')}
-                  </TableCell>
-                  <TableCell>
-                    {editedAt
-                      ? dayjs(editedAt).format('YYYY-MM-DD HH:mm:ss')
-                      : '-'}
-                  </TableCell>
-                </TableRow>
-              );
-            })
-          )}
-        </TableBody>
-      </Table>
+                return (
+                  <TableRow key={id}>
+                    <TableCell>
+                      <Button
+                        size={'icon'}
+                        variant={'ghost'}
+                        onClick={() => onEdit(id)}
+                      >
+                        <Pencil />
+                      </Button>
+                    </TableCell>
+                    <TableCell>{(page - 1) * take + (index + 1)}</TableCell>
+                    <TableCell>
+                      {deviceOwnerLastName + ' ' + deviceOwnerFirstName}
+                    </TableCell>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>{cpu}</TableCell>
+                    <TableCell>{ram}</TableCell>
+                    <TableCell>{hddSize}</TableCell>
+                    <TableCell>{hddBrand}</TableCell>
+                    <TableCell>{keyboard}</TableCell>
+                    <TableCell>{mouse}</TableCell>
+                    <TableCell>{type}</TableCell>
+                    <TableCell>
+                      {dayjs(addedAt).format('YYYY-MM-DD HH:mm:ss')}
+                    </TableCell>
+                  </TableRow>
+                );
+              })
+            )}
+          </TableBody>
+        </Table>
+      </ScrollArea>
 
       <Paginate
         page={page}

@@ -37,6 +37,10 @@ export function Paginate(props: PaginateProps) {
     setPage(Math.ceil(total / take));
   }
 
+  function onPage(page: number) {
+    setPage(page);
+  }
+
   return (
     <Pagination className='justify-end'>
       <PaginationContent>
@@ -47,7 +51,7 @@ export function Paginate(props: PaginateProps) {
           <PaginationPrevious onClick={onPreviousPage} />
         </PaginationItem>
         {Array.from({ length: totalPage }).map((_, index) => (
-          <PaginationItem key={index + 1}>
+          <PaginationItem key={index + 1} onClick={() => onPage(index + 1)}>
             <PaginationLink>{index + 1}</PaginationLink>
           </PaginationItem>
         ))}

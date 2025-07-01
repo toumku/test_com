@@ -1,18 +1,7 @@
-import { AppSidebar } from '@/components/app-sidebar';
-import {
-  Breadcrumb,
-  BreadcrumbList,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbSeparator,
-  BreadcrumbPage,
-} from '@/components/ui/breadcrumb';
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from '@/components/ui/sidebar';
-import { Separator } from '@radix-ui/react-separator';
+import { NavUser } from '@/components/nav-user';
+import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Link from 'next/link';
 import { ReactNode } from 'react';
 
 export type ProtectedLayoutProps = {
@@ -24,28 +13,27 @@ export default function ProtectedLayout(props: ProtectedLayoutProps) {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
       <SidebarInset>
-        <header className='flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12'>
-          <div className='flex items-center gap-2 px-4'>
-            <SidebarTrigger className='-ml-1' />
-            <Separator
-              orientation='vertical'
-              className='mr-2 data-[orientation=vertical]:h-4'
-            />
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem className='hidden md:block'>
-                  <BreadcrumbLink href='#'>ХХЕГ</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className='hidden md:block' />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>
-                    Компьютерын хувийн хэрэг хөтлөх дэвтэр
-                  </BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+        <header className='flex h-16  items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 justify-between'>
+          <Tabs defaultValue='account' className='w-[400px] mx-4'>
+            <TabsList>
+              <TabsTrigger value='home' asChild>
+                <Link href='/'>Эхлэл</Link>
+              </TabsTrigger>
+              <TabsTrigger value='users' asChild>
+                <Link href='/users'>Хэрэглэгч</Link>
+              </TabsTrigger>
+              <TabsTrigger value='employees' asChild>
+                <Link href='/employees'>Бие бүрэлдэхүүн</Link>
+              </TabsTrigger>
+              <TabsTrigger value='devices' asChild>
+                <Link href='/devices'>Төхөөрөмж</Link>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
+          <div className='min-w-40'>
+            <NavUser />
           </div>
         </header>
 
