@@ -45,7 +45,8 @@ export function DeviceImageDialog() {
         ) : !imageURL ? (
           <p> Зураг байхгүй байна</p>
         ) : (
-          <img src={imageURL} className='w-full' />
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={imageURL} alt='Uploaded' className='w-full' />
         )}
       </DialogContent>
     </Dialog>
